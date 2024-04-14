@@ -8,12 +8,16 @@ import pyautogui as pg
 
 frameR = 100 # Frame Reduction
 wCam, hCam = 640, 480
+smoothening = 7
 
 #names are sens like handLms not HandLMS
 cap = cv2.VideoCapture(1) #webcam select
 cap.set(3, wCam)
 cap.set(4, hCam)
 wScr, hScr = ap.screen.size()
+
+plocX, plocY = 0, 0
+clocX, clocY = 0, 0
 
 mpHands = mp.solutions.hands             #mp.solutions.hands - provides hand detection
 hands = mpHands.Hands(False)                   # then has to call hand by using mpHands.Hand()
@@ -83,7 +87,11 @@ while True:
                 x3 = np.interp(x1, (frameR, wCam - frameR), (0, wScr))
                 y3 = np.interp(y1, (frameR, hCam - frameR), (0, hScr))
                 print(wScr - x3,y3)
-                ap.mouse.move(wScr - x3,y3)
+                clocX = plocX + (x3 - plocX) / smoothening
+                clocY = plocY + (y3 - plocY) / smoothening
+                ap.mouse.move(wScr - clocX, clocY)
+                cv2.circle(img, (x1, y1), 15, (255, 0, 255), cv2.FILLED)
+                plocX, plocY = clocX, clocY
             elif(fingerlst == [0,0,0,0,0]):
                 ap.mouse.toggle(ap.mouse.Button.LEFT, False)  
 
