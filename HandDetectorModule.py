@@ -68,10 +68,14 @@ while True:
             if(fingerlst[1] == 1 and fingerlst[2] == 1 and fingerlst[3] == 1 and fingerlst[4] == 1 and fingerlst[0] == 1):
                 ap.mouse.toggle(ap.mouse.Button.LEFT, True)    
                 x1,y1 = lmlist[8][1],lmlist[8][2]
-                x3 = np.interp(x1, (0, wCam), (0, wScr))
-                y3 = np.interp(y1, (0, hCam), (0, hScr))
+                x3 = np.interp(x1, (frameR, wCam - frameR), (0, wScr))
+                y3 = np.interp(y1, (frameR, hCam - frameR), (0, hScr))
                 print(wScr - x3,y3)
-                ap.mouse.move(wScr - x3,y3)    
+                clocX = plocX + (x3 - plocX) / smoothening
+                clocY = plocY + (y3 - plocY) / smoothening
+                ap.mouse.move(wScr - clocX, clocY)
+                cv2.circle(img, (x1, y1), 15, (255, 0, 255), cv2.FILLED)
+                plocX, plocY = clocX, clocY  
             elif(fingerlst[1] == 1 and fingerlst[2] == 1 and fingerlst[3] == 1 and fingerlst[4] == 1):
                 pg.scroll(-100)
             elif(fingerlst[1] == 1 and fingerlst[2] == 1 and fingerlst[3] == 1):
