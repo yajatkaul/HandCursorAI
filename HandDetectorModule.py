@@ -4,7 +4,7 @@ import time
 import math
 import autopy as ap
 import numpy as np
-
+import pyautogui as pg
 
 wCam, hCam = 640, 480
 
@@ -58,7 +58,14 @@ while True:
                     fingerlst[0] = 1
                 else:
                     fingerlst[0] = 0
-            if(fingerlst[1] == 1 and fingerlst[2] == 1):
+
+
+
+            if(fingerlst[1] == 1 and fingerlst[2] == 1 and fingerlst[3] == 1 and fingerlst[4] == 1):
+                pg.scroll(-10)
+            elif(fingerlst[1] == 1 and fingerlst[2] == 1 and fingerlst[3] == 1):
+                pg.scroll(10)
+            elif(fingerlst[1] == 1 and fingerlst[2] == 1):
                 x1,y1 = lmlist[8][1],lmlist[8][2]
                 x2,y2 = lmlist[12][1],lmlist[12][2]
                 distbtwn = math.hypot(x2-x1,y2-y1)
@@ -69,7 +76,6 @@ while True:
                 x3 = np.interp(x1, (0, wCam), (0, wScr))
                 y3 = np.interp(y1, (0, hCam), (0, hScr))
                 ap.mouse.move(wScr - x3,y3)
-
 
 
             mpDraw.draw_landmarks(img, handLms, mpHands.HAND_CONNECTIONS)   #draw_landmarks for drawuing the dots takes "img" - video , "handLms" - hand, "HAND_CONNECTIONS" for drawing lines on hand
