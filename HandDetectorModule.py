@@ -6,6 +6,7 @@ import autopy as ap
 import numpy as np
 import pyautogui as pg
 
+frameR = 100 # Frame Reduction
 wCam, hCam = 640, 480
 
 #names are sens like handLms not HandLMS
@@ -27,6 +28,7 @@ while True:
     imgRGB = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)        #line-16 Convert color mode
     results = hands.process(imgRGB)    
     fingerlst=[0,0,0,0,0]
+    cv2.rectangle(img, (frameR, frameR), (wCam - frameR, hCam - frameR),(255, 0, 255), 2)
     if(results.multi_hand_landmarks): #when hand is detected
         for handLms in results.multi_hand_landmarks:   #use for loop to get each hand  here handLms - hand landmarks
 
@@ -59,12 +61,17 @@ while True:
                 else:
                     fingerlst[0] = 0
 
-
-
-            if(fingerlst[1] == 1 and fingerlst[2] == 1 and fingerlst[3] == 1 and fingerlst[4] == 1):
-                pg.scroll(-10)
+            if(fingerlst[1] == 1 and fingerlst[2] == 1 and fingerlst[3] == 1 and fingerlst[4] == 1 and fingerlst[0] == 1):
+                ap.mouse.toggle(ap.mouse.Button.LEFT, True)    
+                x1,y1 = lmlist[8][1],lmlist[8][2]
+                x3 = np.interp(x1, (0, wCam), (0, wScr))
+                y3 = np.interp(y1, (0, hCam), (0, hScr))
+                print(wScr - x3,y3)
+                ap.mouse.move(wScr - x3,y3)    
+            elif(fingerlst[1] == 1 and fingerlst[2] == 1 and fingerlst[3] == 1 and fingerlst[4] == 1):
+                pg.scroll(-100)
             elif(fingerlst[1] == 1 and fingerlst[2] == 1 and fingerlst[3] == 1):
-                pg.scroll(10)
+                pg.scroll(100)
             elif(fingerlst[1] == 1 and fingerlst[2] == 1):
                 x1,y1 = lmlist[8][1],lmlist[8][2]
                 x2,y2 = lmlist[12][1],lmlist[12][2]
@@ -73,9 +80,12 @@ while True:
                     ap.mouse.click()
             elif(fingerlst[1] == 1):
                 x1,y1 = lmlist[8][1],lmlist[8][2]
-                x3 = np.interp(x1, (0, wCam), (0, wScr))
-                y3 = np.interp(y1, (0, hCam), (0, hScr))
+                x3 = np.interp(x1, (frameR, wCam - frameR), (0, wScr))
+                y3 = np.interp(y1, (frameR, hCam - frameR), (0, hScr))
+                print(wScr - x3,y3)
                 ap.mouse.move(wScr - x3,y3)
+            elif(fingerlst == [0,0,0,0,0]):
+                ap.mouse.toggle(ap.mouse.Button.LEFT, False)  
 
 
             mpDraw.draw_landmarks(img, handLms, mpHands.HAND_CONNECTIONS)   #draw_landmarks for drawuing the dots takes "img" - video , "handLms" - hand, "HAND_CONNECTIONS" for drawing lines on hand
