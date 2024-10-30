@@ -12,8 +12,10 @@
   <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/numpy/numpy-original.svg" height="40" alt="numpy logo"  />
 </div>
 
+<h1 align="left">Depricated</h1>
+
 ###
 
-<p align="left">Python 3.11.9</p>
+><h3 align="left">This is no longer working due to python's wonderful pip version managing system, a lot of dependencies are in conflict</h3>
 
 ###
