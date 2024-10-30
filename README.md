@@ -14,6 +14,6 @@
 
 ###
 
-<p align="left">Python 3.12</p>
+<p align="left">Python 3.11.9</p>
 
 ###
